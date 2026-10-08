@@ -31,3 +31,7 @@ Pages use server rendering, unique titles and descriptions, canonical URLs, Open
 Before replacing the existing site, confirm the business address (the old site’s about copy and footer describe different locations), approve page copy and image crops, map existing indexed URLs to redirects, and verify HTTPS and canonical host redirects. Submit the sitemap to Search Console and measure mobile Core Web Vitals after deploying. Add verified video URLs and metadata before using VideoObject schema. No rankings or Lighthouse score are claimed.
 
 Browser visual testing could not be completed in the development session because no browser was connected. Desktop/mobile layout and form interactions should be reviewed in a browser before publication.
+
+## Site structure and SEO audit
+
+See [SITE_MAP.md](SITE_MAP.md) for homepage order, navigation mapping, page inventory, implemented SEO and deployment follow-up. Run `python3 scripts/audit_site.py` with the development server running to audit metadata, schemas, links and anchors.

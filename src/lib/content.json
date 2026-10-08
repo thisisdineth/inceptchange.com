@@ -81,5 +81,17 @@
       "image": null
     }
   ],
-  "testimonials": []
+  "testimonials": [],
+  "studioGallery": [
+    {
+      "image": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436711/studio-management/web-covers/qtzys4mmoqeqgmqiqo7m.jpg",
+      "alt": "InceptChange team at work",
+      "caption": "The people behind the lens"
+    },
+    {
+      "image": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436545/studio-management/web-covers/i8lokusrpjqhakz98lol.jpg",
+      "alt": "Behind the scenes of an InceptChange production",
+      "caption": "From idea to the final frame"
+    }
+  ]
 }

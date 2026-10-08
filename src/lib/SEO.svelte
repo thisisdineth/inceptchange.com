@@ -1,10 +1,22 @@
 <script lang="ts">
  import {page} from '$app/state';
  import {studio,photo} from '$lib/data';
- let {title,description,image=studio.covers.photography}: {title:string;description:string;image?:string}=$props();
+ import JsonLd from '$lib/JsonLd.svelte';
+ let {title,description,image=studio.covers.documentary,imageAlt='Photography and visual storytelling by InceptChange',type='WebPage',schema=[]}: {title:string;description:string;image?:string;imageAlt?:string;type?:string;schema?:Record<string,unknown>[]}=$props();
  const origin='https://www.inceptchange.com';
+ const canonical=$derived(origin+page.url.pathname);
+ const fullTitle=$derived(title+' | InceptChange');
+ const crumbs=$derived(page.url.pathname==='/'?[]:[{name:'Home',url:origin+'/'},...(page.url.pathname.startsWith('/works/')?[{name:'Our work',url:origin+'/works'}]:page.url.pathname.startsWith('/services/')?[{name:'Services',url:origin+'/#services'}]:[]),{name:title.split(' — ')[0],url:canonical}]);
 </script>
 <svelte:head>
- <title>{title} | InceptChange</title><meta name="description" content={description}/>
- <link rel="canonical" href={origin+page.url.pathname}/><meta property="og:type" content="website"/><meta property="og:site_name" content="InceptChange"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={origin+page.url.pathname}/><meta property="og:image" content={photo(image)}/><meta name="twitter:card" content="summary_large_image"/>
+ <title>{fullTitle}</title><meta name="description" content={description}/>
+ <meta name="robots" content="index, follow, max-image-preview:large"/>
+ <link rel="canonical" href={canonical}/>
+ <meta property="og:type" content="website"/><meta property="og:site_name" content="InceptChange"/><meta property="og:locale" content="en_LK"/>
+ <meta property="og:title" content={fullTitle}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={photo(image,1200)}/><meta property="og:image:alt" content={imageAlt}/>
+ <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={fullTitle}/><meta name="twitter:description" content={description}/><meta name="twitter:image" content={photo(image,1200)}/><meta name="twitter:image:alt" content={imageAlt}/>
 </svelte:head>
+<JsonLd data={{'@context':'https://schema.org','@graph':[
+ {'@type':type,'@id':canonical+'#page',url:canonical,name:fullTitle,description,inLanguage:'en',isPartOf:{'@id':origin+'/#website'},about:{'@id':origin+'/#studio'},primaryImageOfPage:{'@type':'ImageObject',contentUrl:photo(image,1200),caption:imageAlt}},
+ ...(crumbs.length?[{'@type':'BreadcrumbList','@id':canonical+'#breadcrumbs',itemListElement:crumbs.map((crumb,i)=>({'@type':'ListItem',position:i+1,name:crumb.name,item:crumb.url}))}]:[]),...schema
+]}}/>
