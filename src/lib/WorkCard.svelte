@@ -1,0 +1,2 @@
+<script lang="ts">import {photo} from '$lib/data';let {work}:{work:{slug:string;title:string;cat:string;year:string;img:string}}=$props();</script>
+<a class="work-card" href={'/works/'+work.slug}><div class="work-image"><img src={photo(work.img,1000)} alt={work.title} width="1000" height="750" loading="lazy"/><span class="image-chip">{work.cat}</span><span class="image-arrow" aria-hidden="true">↗</span></div><div class="work-caption"><h3>{work.title}</h3><span>{work.year}</span></div></a>

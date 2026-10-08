@@ -1,0 +1,3 @@
+<script lang="ts">import SEO from '$lib/SEO.svelte';import WorkCard from '$lib/WorkCard.svelte';import {works} from '$lib/data';</script>
+<SEO title="Our Work — Photography & Documentary Portfolio" description="Explore InceptChange’s selected projects, including GIGA Field Visit, Women Empowerment Program and Weather Kids Program."/>
+<section class="section"><p class="eyebrow"><span class="dot"></span> THE INCEPTCHANGE PORTFOLIO</p><h1 class="page-title">Every story.<br/><span class="serif">A new perspective.</span></h1><p class="intro">A selection of people, places, and projects through our lens.</p><div class="work-grid">{#each works as work}<WorkCard {work}/>{/each}</div></section>

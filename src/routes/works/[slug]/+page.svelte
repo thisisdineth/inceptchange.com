@@ -1,0 +1,3 @@
+<script lang="ts">import SEO from '$lib/SEO.svelte';import {photo} from '$lib/data';let {data}=$props();</script>
+<SEO title={data.work.title+' — '+data.work.cat} description={'Explore '+data.work.title+', a '+data.work.cat.toLowerCase()+' project captured by InceptChange in '+data.work.year+'. View the project gallery.'} image={data.work.img}/>
+<section class="section"><a class="text-link" href="/works">← All work</a><p class="eyebrow project-label">{data.work.cat} / {data.work.year}</p><h1 class="page-title">{data.work.title}</h1><div class="gallery">{#each data.work.gallery as img,i}<img src={photo(img,1600)} alt={`${data.work.title} — photograph ${i+1}`} width="1600" height="1100" loading={i===0?'eager':'lazy'}/>{/each}</div></section>

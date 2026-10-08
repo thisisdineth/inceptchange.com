@@ -1,0 +1,85 @@
+{
+  "featuredWorks": [
+    {
+      "img": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913601/studio-management/gallery/kw5xn7llqwgjfbzhqv2t.jpg",
+      "cat": "Documentary",
+      "title": "GIGA Field Visit",
+      "year": "2026",
+      "gallery": [
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913601/studio-management/gallery/kw5xn7llqwgjfbzhqv2t.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913601/studio-management/gallery/e9czkb2fjc3hwwjsfqmd.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913601/studio-management/gallery/seuem4m0kthihqx7esyx.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913601/studio-management/gallery/y6umdama6c9gcooj1g8r.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913605/studio-management/gallery/vtjapossm1xbvnjpafaz.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913605/studio-management/gallery/wkxelo1ozvr4w8zofpjk.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913605/studio-management/gallery/wcnyoxxhr5v1nlg0murq.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777913605/studio-management/gallery/mlrcq4ohlvklr1cnstiy.jpg"
+      ]
+    },
+    {
+      "img": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914451/studio-management/gallery/evmud1ng5ea7idmk3zl9.jpg",
+      "cat": "Documentary",
+      "title": "Women Empowerment Program",
+      "year": "2026",
+      "gallery": [
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914451/studio-management/gallery/evmud1ng5ea7idmk3zl9.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914452/studio-management/gallery/stezhrgikxj9pafipqg7.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914452/studio-management/gallery/yqtaptiqt16lz4x6gcbf.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914452/studio-management/gallery/tjhovzwaqs1463yam00q.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914463/studio-management/gallery/z4lgrihnzkzrbs13vipw.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914464/studio-management/gallery/lfiqyplbitjmuj6alam6.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914463/studio-management/gallery/ktncwdgyu7uccacdgfme.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914463/studio-management/gallery/kk18ej2bnblzobd2gq1o.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914470/studio-management/gallery/pwvq1w2magig5jgd4vgx.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777914471/studio-management/gallery/pl480ilyjwbuwyyyddoi.jpg"
+      ]
+    },
+    {
+      "img": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915045/studio-management/gallery/pey6dyvvuwtutpfqzxb2.jpg",
+      "cat": "Documentary",
+      "title": "Weather Kids Program",
+      "year": "2026",
+      "gallery": [
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915045/studio-management/gallery/pey6dyvvuwtutpfqzxb2.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915045/studio-management/gallery/gsycimoa1nrfrwy0j3rf.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915046/studio-management/gallery/sde6ht8zsl2dlxgfwxn5.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915046/studio-management/gallery/ybwmef9rsnb0mplpeiny.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915053/studio-management/gallery/kljbkinpoqxzs5ctyccb.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915054/studio-management/gallery/balt8rpaltwtqfio7lyx.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915054/studio-management/gallery/bwehlvptmcdotts2linr.jpg",
+        "https://res.cloudinary.com/dwngt89vw/image/upload/v1777915055/studio-management/gallery/qwu3sbbqlutgdmr5c6hv.jpg"
+      ]
+    }
+  ],
+  "contacts": {
+    "address": "No.21/2, Rajamaha Vihara Rd, Navinna, Mharagama.",
+    "email": "inceptchange@gmail.com",
+    "phone": "+94 78 777 3059 / +94 77 954 6917",
+    "hours": "8:00 AM \u2014 10:00 PM",
+    "facebook": "https://www.facebook.com/profile.php?id=61580313956988",
+    "instagram": "https://www.instagram.com/_._inceptchange_._?igsh=MXhrOWdkZngxeGJpcw==",
+    "linkedin": "https://www.linkedin.com/company/inceptchange",
+    "youtube": "https://www.youtube.com/@inceptchange"
+  },
+  "covers": {
+    "cta": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1800&q=80",
+    "take-action": "https://images.unsplash.com/photo-1576094736797-cbf79f6dc2d5?auto=format&fit=crop&w=1600&q=85",
+    "videography": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436545/studio-management/web-covers/i8lokusrpjqhakz98lol.jpg",
+    "documentary": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436570/studio-management/web-covers/fdrjgkmq2nixplttphfg.jpg",
+    "hero": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436690/studio-management/web-covers/v9sagpbmekkashmxcm63.png",
+    "about": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436711/studio-management/web-covers/qtzys4mmoqeqgmqiqo7m.jpg",
+    "photography": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777481279/studio-management/web-covers/mn8vzs8sw0xovrpq09y1.jpg",
+    "weddings": "https://res.cloudinary.com/dwngt89vw/image/upload/v1787978298/studio-management/web-covers/xn0noqveaxjdcci04jqc.jpg"
+  },
+  "packages": [
+    {
+      "id": "cc4de0d5-f9dc-474b-8b0b-9e8c8d65b6f3",
+      "name": "Timeless Romance Package",
+      "description": null,
+      "price": 160000,
+      "section": "photography",
+      "image": null
+    }
+  ],
+  "testimonials": []
+}
