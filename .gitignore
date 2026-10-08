@@ -3,4 +3,4 @@ node_modules
 build
 .env
 .DS_Store
-.mp4
+*.[mM][pP]4
