@@ -22,7 +22,7 @@ The Node adapter defaults to port 3000. Serve behind an HTTPS reverse proxy. No 
 
 ## Content
 
-`src/lib/content.json` contains galleries, contacts and image URLs imported from the existing public website. `src/lib/data.ts` defines service copy. Cloudinary transformations deliver resized, compressed images. The contact form prepares a mailto enquiry; it does not send or store enquiries on the server. Configure an email provider and a SvelteKit server action to support direct delivery.
+`src/lib/content.json` contains galleries, contacts and image URLs imported from the existing public website. `src/lib/data.ts` defines service copy. Cloudinary transformations deliver resized, compressed images. The contact page builds a guided brief using streamed Gemini questions. A private Go service sends the reviewed brief to inceptchange@gmail.com through Resend. Enquiries are not stored in a database.
 
 ## SEO and launch
 
@@ -35,3 +35,25 @@ Browser visual testing could not be completed in the development session because
 ## Site structure and SEO audit
 
 See [SITE_MAP.md](SITE_MAP.md) for homepage order, navigation mapping, page inventory, implemented SEO and deployment follow-up. Run `python3 scripts/audit_site.py` with the development server running to audit metadata, schemas, links and anchors.
+
+## AI contact enquiries (Go backend)
+
+1. Copy `.env.example` to `.env` for SvelteKit. Generate a long random `ENQUIRY_PROXY_SECRET` (for example, `openssl rand -hex 32`).
+2. Copy `backend/.env.example` to `backend/.env`, fill in the same proxy secret, a Gemini API key and Resend credentials. Set `RESEND_FROM` to a sender on your verified Resend domain.
+3. Start the private Go service in a second terminal:
+
+```sh
+cd backend
+set -a
+source .env
+set +a
+go run .
+```
+
+Then run `npm run dev` in the project root. Go 1.24 or newer is required. The backend uses the Gemini REST `streamGenerateContent` API with SSE; `GEMINI_MODEL` can be changed to a model available to your API key. The assistant starts streaming the first question when the contact page opens and tailors subsequent questions to the supplied brief.
+
+Production: run the compiled Go service (`cd backend && go build -o enquiry .`) alongside the SvelteKit Node server. Supply the same private environment settings to both processes and set `ENQUIRY_BACKEND_URL` to the private Go service address. Keep the Go port private. Configure your HTTPS reverse proxy to preserve the public origin, disable response buffering for `/api/enquiry/question`, and allow at least 75 seconds for streaming. With adapter-node, configure trusted proxy/client-address settings for your deployment; only trust headers supplied by your proxy. The Go service limits each client to 40 requests per hour per process.
+
+Resend sends the enquiry to the fixed recipient inceptchange@gmail.com, with the visitor's email as Reply-To. Set `RESEND_FROM` to a verified domain sender for production. The default onboarding@resend.dev sender is restricted by Resend to your account email. Success appears only after Resend accepts the email; failed requests retain the brief for retry.
+
+Validate with `npm run check`, `npm run build`, and `cd backend && go test ./...`. Before launch, test a complete enquiry using real Gemini/Resend credentials and check receipt in the studio inbox. Retrying an ambiguously interrupted Resend request can deliver a duplicate; the current backend has no persistent submission queue or deduplication store.

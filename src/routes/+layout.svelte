@@ -1,5 +1,5 @@
 <script lang="ts">
- import JsonLd from '$lib/JsonLd.svelte';import {afterNavigate} from '$app/navigation';import CursorPattern from '$lib/CursorPattern.svelte';import {onMount} from 'svelte';import '../app.css';import {studio} from '$lib/data';import {page} from '$app/state';
+ import ContactNow from '$lib/ContactNow.svelte';import ThemeToggle from '$lib/ThemeToggle.svelte';import PageLoader from '$lib/PageLoader.svelte';import JsonLd from '$lib/JsonLd.svelte';import {afterNavigate} from '$app/navigation';import CursorPattern from '$lib/CursorPattern.svelte';import {onMount} from 'svelte';import '../app.css';import {studio} from '$lib/data';import {page} from '$app/state';
  let {children}=$props();let menu=$state(false);let scrolled=$state(false);let activeSection=$state('');
  const links=[{label:'Our work',id:'work',route:'/works'},{label:'What we do',id:'services',route:'/services'},{label:'The studio',id:'about',route:''},{label:'Studio booking',id:'studio-booking',route:''}];
  afterNavigate(()=>{menu=false;});
@@ -25,6 +25,10 @@
  <div class="footer-marquee-track" aria-hidden="true">
   {#each [0,1] as copy}<div class="footer-marquee-group"><span>InceptChange</span><i>✳</i><span>Photography</span><i>✳</i><span class="serif">Film &amp; stories.</span><i>✳</i></div>{/each}
  </div>
-</div><div class="footer-bottom"><span>© {new Date().getFullYear()} InceptChange</span><span>Incepting minds. Changing behaviors.</span><a href="#main">Back to top ↑</a></div></footer>
+</div><ThemeToggle/><div class="footer-bottom"><span>© {new Date().getFullYear()} InceptChange</span><span>Incepting minds. Changing behaviors.</span><a href="#main">Back to top ↑</a></div></footer>
 
 <CursorPattern/>
+
+<PageLoader/>
+
+<ContactNow/>
