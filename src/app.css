@@ -302,3 +302,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0;}
 .seo-content{max-width:900px;margin:3rem auto;line-height:1.8}.seo-content h2{font-size:clamp(1.6rem,3vw,2.5rem);margin:2.5rem 0 1rem}.seo-content h3{font-size:1.3rem;margin:1.8rem 0 .6rem}.seo-content p{margin:.8rem 0 1.3rem}.seo-content a{text-decoration:underline;text-underline-offset:4px}.seo-content details{border-bottom:1px solid currentColor;padding:1rem 0}.seo-content summary{cursor:pointer;font-weight:600}.seo-content li{margin:.7rem 0}
 
 .page-title .serif{white-space:normal}
+
+/* Preserve inline label spacing when an SVG replaces a text symbol. */
+.button .icon-label{font-size:inherit;}

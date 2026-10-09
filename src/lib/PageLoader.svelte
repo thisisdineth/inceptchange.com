@@ -1,4 +1,5 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
  import {onMount} from 'svelte';
  import {navigating} from '$app/state';
  let intro=$state(false),leaving=$state(false),routeLoading=$state(false);
@@ -40,7 +41,7 @@
   <div class="intro-glow intro-glow-teal"></div><div class="intro-glow intro-glow-peach"></div>
   <div class="intro-brand">
    <div class="intro-logo"><span class="intro-orbit"></span><img src="/images/logo.png" alt="" width="256" height="212"/></div>
-   <p class="intro-wordmark">Incept<span>Change</span><i>✳</i></p>
+   <p class="intro-wordmark">Incept<span>Change</span><i><SiteIcon name="asterisk"/></i></p>
    <p class="intro-caption">STORIES COMING INTO FOCUS</p>
    <div class="intro-line"><span></span></div>
   </div>

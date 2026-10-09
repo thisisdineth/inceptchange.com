@@ -1,4 +1,5 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
  import {onMount} from 'svelte';
  const copy=[
   'InceptChange is a Creative Digital Studio based in Maharagama, Sri Lanka, with roots in Dharga Town. Working across Sri Lanka, we share a singular belief — that every brand has a story worth telling beautifully.',
@@ -29,6 +30,6 @@
   {#each paragraphs as words}
    <p>{#each words as word}<svelte:element this={word.emphasis?'strong':'span'} class="fill-word" style={`--word-index:${word.index};`}>{word.text}</svelte:element>{' '}{/each}</p>
   {/each}
-  <a class="text-link" href="/contact">Meet your creative partner <span>↗</span></a>
+  <a class="text-link" href="/contact">Meet your creative partner <span><SiteIcon name="arrow-up-right"/></span></a>
  </div>
 </section>

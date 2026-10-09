@@ -1,8 +1,10 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
  import {onMount} from 'svelte';
+ type IconName="system"|"sun"|"moon";
  type Theme='system'|'light'|'dark';
  let preference=$state<Theme>('system');
- const choices:{value:Theme;label:string;icon:string}[]=[{value:'system',label:'System',icon:'◐'},{value:'light',label:'Light',icon:'☀'},{value:'dark',label:'Dark',icon:'☾'}];
+ const choices:{value:Theme;label:string;icon:IconName}[]=[{value:'system',label:'System',icon:'system'},{value:'light',label:'Light',icon:'sun'},{value:'dark',label:'Dark',icon:'moon'}];
  function apply(){
   const dark=preference==='dark'||(preference==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme=dark?'dark':'light';
@@ -18,4 +20,4 @@
   return ()=>{media.removeEventListener('change',sync);window.removeEventListener('storage',storage);};
  });
 </script>
-<div class="theme-control"><span class="theme-label">Appearance</span><div class="theme-options" role="group" aria-label="Colour theme">{#each choices as choice}<button aria-pressed={preference===choice.value} onclick={()=>select(choice.value)}><span aria-hidden="true">{choice.icon}</span>{choice.label}</button>{/each}</div></div>
+<div class="theme-control"><span class="theme-label">Appearance</span><div class="theme-options" role="group" aria-label="Colour theme">{#each choices as choice}<button aria-pressed={preference===choice.value} onclick={()=>select(choice.value)}><span aria-hidden="true"><SiteIcon name={choice.icon}/></span>{choice.label}</button>{/each}</div></div>

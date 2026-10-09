@@ -1,4 +1,5 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
  import { enquiryQuestions, readEnquiryJSON } from '$lib/enquiry';
  import Breadcrumbs from '$lib/Breadcrumbs.svelte';
  import SEO from '$lib/SEO.svelte';
@@ -65,13 +66,13 @@
    <p class="eyebrow"><span class="dot"></span> EVERY GREAT FRAME STARTS HERE</p>
    <h1 class="page-title">Tell us<br/><span class="serif">your story.</span></h1>
    <p class="intro">A big occasion. A little idea. Something worth capturing. Let’s shape it together, one question at a time.</p>
-   <div class="story-note"><span>✳</span><p>Your vision, our next conversation.<small>A thoughtful brief in just a few steps.</small></p></div>
-   <div class="story-direct"><span>Prefer a conversation?</span><a href={'mailto:'+studio.contacts.email}>{studio.contacts.email} ↗</a><a href="tel:+94787773059">+94 78 777 3059</a></div>
+   <div class="story-note"><span><SiteIcon name="asterisk"/></span><p>Your vision, our next conversation.<small>A thoughtful brief in just a few steps.</small></p></div>
+   <div class="story-direct"><span>Prefer a conversation?</span><a href={'mailto:'+studio.contacts.email}>{studio.contacts.email} <SiteIcon name="arrow-up-right"/></a><a href="tel:+94787773059">+94 78 777 3059</a></div>
   </div>
   <div class="story-card" bind:this={conversation}>
 
    {#if sent}
-    <div class="story-success" role="status"><span>✓</span><p class="eyebrow">YOUR NEXT CHAPTER</p><h2>Your story is<br/><em class="serif">in good hands.</em></h2><p>Your enquiry has been sent to our team. We’ll contact you soon at <strong>{brief.email}</strong> to talk through the details.</p><p>{customerCopySent?'A copy of your brief has also been sent to your email.':'Your enquiry reached our team, but we couldn’t send your email copy. We’ll share the details when we contact you.'}</p><a class="button dark" href="/work">Explore our work ↗</a></div>
+    <div class="story-success" role="status"><span><SiteIcon name="check"/></span><p class="eyebrow">YOUR NEXT CHAPTER</p><h2>Your story is<br/><em class="serif">in good hands.</em></h2><p>Your enquiry has been sent to our team. We’ll contact you soon at <strong>{brief.email}</strong> to talk through the details.</p><p>{customerCopySent?'A copy of your brief has also been sent to your email.':'Your enquiry reached our team, but we couldn’t send your email copy. We’ll share the details when we contact you.'}</p><a class="button dark" href="/work"><span class="icon-label">Explore our work <SiteIcon name="arrow-up-right"/></span></a></div>
    {:else}
     <div class="story-progress"><span>0{index+1} / {String(steps.length).padStart(2,'0')}</span><span>{labels[step]}</span></div>
     <div class="progress-track"><span style:width={`${((index+1)/steps.length)*100}%`}></span></div>
@@ -93,7 +94,7 @@
       <div class="story-chips">{#each (step==='date'&&studioRequest?[]:suggestions[step]) || [] as suggestion}<button type="button" disabled={busy||!ready} onclick={()=>answer=step==='touches'&&answer?`${answer}, ${suggestion}`:suggestion}>{suggestion} +</button>{/each}</div>
      {/if}
      {#if error}<div class="story-error" role="alert">{error}{#if !ready}<button type="button" onclick={ask} disabled={busy}>Retry question ↻</button>{/if}</div>{/if}
-     <div class="story-actions">{#if index>0}<button class="story-back" type="button" onclick={back} disabled={busy}>← Back</button>{:else}<span class="story-hint">Made for your kind of story.</span>{/if}<button class="button dark" type="submit" disabled={busy||(!ready&&step!=='review'&&step!=='contact')}>{busy?'Just a moment…':step==='contact'?'Send my enquiry ↗':step==='review'?'Add final touches ↗':'Continue ↗'}</button></div>
+     <div class="story-actions">{#if index>0}<button class="story-back" type="button" onclick={back} disabled={busy}><SiteIcon name="arrow-left"/> Back</button>{:else}<span class="story-hint">Made for your kind of story.</span>{/if}<button class="button dark" type="submit" disabled={busy||(!ready&&step!=='review'&&step!=='contact')}><span class="icon-label">{busy?'Just a moment…':step==='contact'?'Send my enquiry':step==='review'?'Add final touches':'Continue'}{#if !busy} <SiteIcon name="arrow-up-right"/>{/if}</span></button></div>
     </form>
    {/if}
   </div>

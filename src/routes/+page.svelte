@@ -1,4 +1,5 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
 import {onMount} from 'svelte';
 let heroStage: HTMLElement;
 let currentSlide=$state(0);
@@ -43,22 +44,22 @@ import Partners from '$lib/Partners.svelte';import Showreel from '$lib/Showreel.
   <div class="hero-logo"><img src="/images/logo.png" alt="InceptChange studio logo" width="256" height="212"/></div>
   <h1 class="animated-headline">{#key currentSlide}<span class="headline-phrase headline-first">{slide.first}</span><br/><span class="headline-phrase headline-second">{slide.second}</span> <span class="serif headline-phrase headline-last">{slide.emphasis}</span>{/key}</h1>
  </div>
- <a class="hero-explore" href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
+ <a class="hero-explore" href="#work">Scroll to explore <span aria-hidden="true"><SiteIcon name="arrow-down"/></span></a>
  <div class="slideshow-controls" role="group" aria-label="Hero slideshow">
   {#each heroSlides as item,i}<button class="slide-dot" class:selected={currentSlide===i} aria-label={`Show slide ${i+1}: ${item.first} ${item.second} ${item.emphasis}`} aria-pressed={currentSlide===i} disabled={!loadedSlides[i]} onclick={()=>selectSlide(i)}><span></span></button>{/each}
-  <button class="slide-pause" onclick={()=>paused=!paused} aria-label={paused?'Play slideshow':'Pause slideshow'} aria-pressed={paused}>{paused?'▶':'Ⅱ'}</button>
+  <button class="slide-pause" onclick={()=>paused=!paused} aria-label={paused?'Play slideshow':'Pause slideshow'} aria-pressed={paused}><SiteIcon name={paused?'play':'pause'}/></button>
  </div>
 </section>
 </div>
 <div class="discipline-strip" role="region" aria-label="Our disciplines: Photography, Videography, Documentary, Experiences">
  <div class="discipline-track" aria-hidden="true">
-  {#each [0,1] as copy}<div class="discipline-group">{#each ['Photography','Videography','Documentary','Experiences'] as discipline}<span>{discipline}</span><i>✳</i>{/each}</div>{/each}
+  {#each [0,1] as copy}<div class="discipline-group">{#each ['Photography','Videography','Documentary','Experiences'] as discipline}<span>{discipline}</span><i><SiteIcon name="asterisk"/></i>{/each}</div>{/each}
  </div>
 </div>
-<section class="section" id="work"><div class="section-head"><div><p class="eyebrow"><span class="dot"></span> SELECTED WORK</p><h2>Stories worth<br/><span class="muted">a closer look.</span></h2><p class="work-intro">Photography, film, and documentary projects for people, brands, and communities in Sri Lanka.</p></div><a class="text-link" href="/works">All our work <span>↗</span></a></div><div class="work-grid">{#each works as work}<WorkCard {work}/>{/each}</div></section>
+<section class="section" id="work"><div class="section-head"><div><p class="eyebrow"><span class="dot"></span> SELECTED WORK</p><h2>Stories worth<br/><span class="muted">a closer look.</span></h2><p class="work-intro">Photography, film, and documentary projects for people, brands, and communities in Sri Lanka.</p></div><a class="text-link" href="/works">All our work <span><SiteIcon name="arrow-up-right"/></span></a></div><div class="work-grid">{#each works as work}<WorkCard {work}/>{/each}</div></section>
 <StudioStats/>
 <Partners/>
-<section class="section services-section" id="services"><div class="section-head"><div><p class="eyebrow"><span class="dot"></span> WHAT WE DO</p><h2>Your vision.<br/><span class="muted">Our creative lens.</span></h2></div><p class="section-description">From a single photograph to a complete production, we find the right way to tell your story.</p></div><div class="service-grid">{#each services as service,i}<a class={'service-card '+service.color} href={'/services/'+service.slug}><div class="service-number">0{i+1}<span>↗</span></div><h3>{service.title}</h3><p>{service.description}</p></a>{/each}</div></section>
+<section class="section services-section" id="services"><div class="section-head"><div><p class="eyebrow"><span class="dot"></span> WHAT WE DO</p><h2>Your vision.<br/><span class="muted">Our creative lens.</span></h2></div><p class="section-description">From a single photograph to a complete production, we find the right way to tell your story.</p></div><div class="service-grid">{#each services as service,i}<a class={'service-card '+service.color} href={'/services/'+service.slug}><div class="service-number">0{i+1}<span><SiteIcon name="arrow-up-right"/></span></div><h3>{service.title}</h3><p>{service.description}</p></a>{/each}</div></section>
 <section class="feature" id="documentary"><Showreel poster={photo(studio.covers.documentary,1800)}/><div><p class="eyebrow">BEYOND THE FRAME</p></div></section>
 <AboutStudio/>
 <StudioBooking/>

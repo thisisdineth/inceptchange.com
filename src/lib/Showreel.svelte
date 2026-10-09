@@ -1,4 +1,5 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
  import {onMount} from 'svelte';
  let {poster}:{poster:string}=$props();
  let video:HTMLVideoElement;
@@ -26,10 +27,10 @@
 </script>
 <video class="showreel-video" bind:this={video} src={source} {poster} autoplay={wantsPlayback} bind:muted loop playsinline preload="none" aria-label="InceptChange studio showreel" onplay={()=>playing=true} onpause={()=>playing=false} onloadeddata={()=>{if(wantsPlayback)video.play().catch(()=>{});else video.pause();}}></video>
 <nav class="showreel-controls" aria-label="Showreel controls">
-<button class="showreel-toggle" onclick={toggle} aria-label={playing?'Pause showreel':'Play showreel'}>{playing?'Ⅱ':'▶'} <span>{playing?'Pause showreel':'Play showreel'}</span></button>
+<button class="showreel-toggle" onclick={toggle} aria-label={playing?'Pause showreel':'Play showreel'}><SiteIcon name={playing?'pause':'play'}/> <span>{playing?'Pause showreel':'Play showreel'}</span></button>
 
 <button class="showreel-toggle" onclick={toggleSound} aria-label={muted?'Unmute showreel':'Mute showreel'} aria-pressed={!muted}>
- <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/>{#if muted}<path d="m16 9 5 6m0-6-5 6"/>{:else}<path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>{/if}</svg>
+ <SiteIcon name={muted?'volume-x':'volume-2'} size={16}/>
  <span>{muted?'Sound on':'Sound off'}</span>
 </button>
 </nav>

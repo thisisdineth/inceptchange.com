@@ -1,4 +1,5 @@
 <script lang="ts">
+ import SiteIcon from "$lib/SiteIcon.svelte";
  import {onMount} from 'svelte';
  import {studio,photo} from '$lib/data';
  const dateParts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Colombo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
@@ -37,18 +38,18 @@
  <div class="booking-grid">
   <div class="booking-calendar">
    <div class="calendar-heading"><h3>Pick your date</h3><span>01 / PLAN YOUR SESSION</span></div>
-   <div class="calendar-month"><button onclick={()=>changeMonth(-1)} disabled={isFirstMonth} aria-label="Previous month">←</button><h4 aria-live="polite">{monthLabel}</h4><button onclick={()=>changeMonth(1)} aria-label="Next month">→</button></div>
+   <div class="calendar-month"><button onclick={()=>changeMonth(-1)} disabled={isFirstMonth} aria-label="Previous month"><SiteIcon name="arrow-left"/></button><h4 aria-live="polite">{monthLabel}</h4><button onclick={()=>changeMonth(1)} aria-label="Next month"><SiteIcon name="arrow-right"/></button></div>
    <div class="calendar-days">
     {#each ['M','T','W','T','F','S','S'] as day}<span class="calendar-weekday" aria-hidden="true">{day}</span>{/each}
     {#each Array(offset) as blank}<span aria-hidden="true"></span>{/each}
     {#each Array(days) as _,index}{@const date=dateKey(index+1)}<button class="calendar-day" class:chosen={selected===date} class:today={date===today} class:unavailable={unavailable.includes(date)} disabled={date<today||unavailable.includes(date)} aria-label={readable(date)+(unavailable.includes(date)?' — unavailable':'')} aria-pressed={selected===date} onclick={()=>selected=date}>{index+1}</button>{/each}
    </div>
-   <div class="booking-selection"><p role="status">{selected?readable(selected):'Select a preferred date to get started.'}</p>{#if selected}<a class="button booking-enquire" href={'/contact?service=studio-session&studio=1&date='+selected}>Enquire about this date <span>↗</span></a>{:else}<button class="button booking-enquire" disabled>Enquire about this date <span>↗</span></button>{/if}<small>{availabilityLoaded?'Marked dates are unavailable. Other dates are requests; we’ll confirm availability.':'Live availability is unavailable. Dates are requests; we’ll confirm with you.'}</small></div>
+   <div class="booking-selection"><p role="status">{selected?readable(selected):'Select a preferred date to get started.'}</p>{#if selected}<a class="button booking-enquire" href={'/contact?service=studio-session&studio=1&date='+selected}>Enquire about this date <span><SiteIcon name="arrow-up-right"/></span></a>{:else}<button class="button booking-enquire" disabled>Enquire about this date <span><SiteIcon name="arrow-up-right"/></span></button>{/if}<small>{availabilityLoaded?'Marked dates are unavailable. Other dates are requests; we’ll confirm availability.':'Live availability is unavailable. Dates are requests; we’ll confirm with you.'}</small></div>
   </div>
   <div class="booking-gallery" bind:this={gallery}>
    {#each images as item,index}{#if requestedSlides.includes(index)}<img class:visible={slide===index} src={photo(item.image,1400)} srcset={`${photo(item.image,800)} 800w, ${photo(item.image,1400)} 1400w`} sizes="(max-width: 700px) 88vw, 46vw" decoding="async" alt={item.alt} aria-hidden={slide!==index} width="1400" height="1400" loading="lazy"/>{/if}{/each}
    <div class="booking-gallery-shade"></div>
-   <div class="booking-gallery-caption"><p class="eyebrow">INSIDE InceptChange</p><h3>{images[slide].caption}</h3><div class="booking-gallery-controls"><div>{#each images as item,index}<button class:chosen={slide===index} aria-label={`Show image ${index+1}: ${item.caption}`} aria-pressed={slide===index} onclick={()=>{slide=index;paused=true;}}></button>{/each}</div><button class="booking-gallery-pause" aria-label={paused?'Play studio slideshow':'Pause studio slideshow'} aria-pressed={paused} onclick={()=>paused=!paused}>{paused?'▶':'Ⅱ'}</button></div></div>
+   <div class="booking-gallery-caption"><p class="eyebrow">INSIDE InceptChange</p><h3>{images[slide].caption}</h3><div class="booking-gallery-controls"><div>{#each images as item,index}<button class:chosen={slide===index} aria-label={`Show image ${index+1}: ${item.caption}`} aria-pressed={slide===index} onclick={()=>{slide=index;paused=true;}}></button>{/each}</div><button class="booking-gallery-pause" aria-label={paused?'Play studio slideshow':'Pause studio slideshow'} aria-pressed={paused} onclick={()=>paused=!paused}><SiteIcon name={paused?'play':'pause'}/></button></div></div>
   </div>
  </div>
 </section>

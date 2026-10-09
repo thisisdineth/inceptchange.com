@@ -23,6 +23,8 @@
     "vite": "^7.0.0"
   },
   "dependencies": {
+    "@iconify-icons/lucide": "^2.0.18",
+    "@iconify/svelte": "^5.2.2",
     "@supabase/server": "^1.9.1"
   }
 }
