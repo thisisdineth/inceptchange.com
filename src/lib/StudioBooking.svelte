@@ -12,9 +12,11 @@
   fetch('/api/studio/availability?month='+query,{signal:controller.signal}).then(r=>r.json()).then(result=>{unavailable=result.dates||[];availabilityLoaded=!!result.available;if(unavailable.includes(selected))selected='';}).catch(()=>{});
   return ()=>controller.abort();
  });
- let slide=$state(0),paused=$state(false),visible=false;
+ let slide=$state(0),paused=$state(false),visible=$state(false);
  let gallery:HTMLElement;
  const images=studio.studioGallery;
+ let requestedSlides=$state<number[]>([0]);
+ $effect(()=>{if(visible){const next=(slide+1)%images.length;if(!requestedSlides.includes(slide)||!requestedSlides.includes(next))requestedSlides=[...new Set([...requestedSlides,slide,next])];}});
  const days=$derived(new Date(Date.UTC(year,month+1,0)).getUTCDate());
  const offset=$derived((new Date(Date.UTC(year,month,1)).getUTCDay()+6)%7);
  const monthLabel=$derived(new Intl.DateTimeFormat('en',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(Date.UTC(year,month,1))));
@@ -44,11 +46,11 @@
    <div class="booking-selection"><p role="status">{selected?readable(selected):'Select a preferred date to get started.'}</p>{#if selected}<a class="button booking-enquire" href={'/contact?service=studio-session&studio=1&date='+selected}>Enquire about this date <span>↗</span></a>{:else}<button class="button booking-enquire" disabled>Enquire about this date <span>↗</span></button>{/if}<small>{availabilityLoaded?'Marked dates are unavailable. Other dates are requests; we’ll confirm availability.':'Live availability is unavailable. Dates are requests; we’ll confirm with you.'}</small></div>
   </div>
   <div class="booking-gallery" bind:this={gallery}>
-   {#each images as item,index}<img class:visible={slide===index} src={photo(item.image,1400)} alt={item.alt} aria-hidden={slide!==index} width="1400" height="1400" loading="lazy"/>{/each}
+   {#each images as item,index}{#if requestedSlides.includes(index)}<img class:visible={slide===index} src={photo(item.image,1400)} srcset={`${photo(item.image,800)} 800w, ${photo(item.image,1400)} 1400w`} sizes="(max-width: 700px) 88vw, 46vw" decoding="async" alt={item.alt} aria-hidden={slide!==index} width="1400" height="1400" loading="lazy"/>{/if}{/each}
    <div class="booking-gallery-shade"></div>
    <div class="booking-gallery-caption"><p class="eyebrow">INSIDE InceptChange</p><h3>{images[slide].caption}</h3><div class="booking-gallery-controls"><div>{#each images as item,index}<button class:chosen={slide===index} aria-label={`Show image ${index+1}: ${item.caption}`} aria-pressed={slide===index} onclick={()=>{slide=index;paused=true;}}></button>{/each}</div><button class="booking-gallery-pause" aria-label={paused?'Play studio slideshow':'Pause studio slideshow'} aria-pressed={paused} onclick={()=>paused=!paused}>{paused?'▶':'Ⅱ'}</button></div></div>
   </div>
  </div>
 </section>
 
-<style>.calendar-day.unavailable{text-decoration:line-through;background:#db919815;opacity:.65}</style>
+<style>.calendar-day.unavailable{text-decoration:line-through;background:#db919815;opacity:.65}.booking-gallery-controls>div{flex-wrap:wrap;gap:3px;max-width:calc(100% - 52px)}.booking-gallery-controls>div button{width:18px;height:24px}</style>

@@ -1,8 +1,13 @@
 import content from './content.json';
+import studioImages from './studio-images.json';
 export const studio = content;
 export const slugify = (text:string) => text.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 export const works = content.featuredWorks.map(work=>({...work,slug:slugify(work.title)}));
-export const photo = (url:string,width=1200) => url.includes('res.cloudinary.com') ? url.replace('/upload/',`/upload/f_auto,q_auto,w_${width}/`) : url;
+export const photo = (url:string,width=1200) => {
+ const local=(studioImages as Record<string,Record<string,string>>)[url];
+ if(local)return local[width<=800?'800':'1400'];
+ return url.includes('res.cloudinary.com') ? url.replace('/upload/',`/upload/f_auto,q_auto,w_${width}/`) : url;
+};
 export const services = [
  {slug:'photography',title:'Photography',tag:'A moment. A feeling. Forever.',description:'Portraits, corporate events, and brand photography with a thoughtful eye for light, detail, and the moments that matter.',color:'peach',image:content.covers.photography},
  {slug:'videography',title:'Videography',tag:'Stories you can feel.',description:'From a brand film to an event highlight, we bring movement, sound, and emotion together to tell your story.',color:'teal',image:content.covers.videography},

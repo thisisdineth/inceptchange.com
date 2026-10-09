@@ -1,5 +1,7 @@
 # InceptChange — install, run and deploy
 
+**Docker is the primary production workflow.** See [docs/DOCKER.md](docs/DOCKER.md) for container startup and deployment on all operating systems. The native commands below remain useful for development; the artifact/systemd deployment sections describe the retained legacy setup and should not be mixed with the active Docker stack.
+
 Local website: http://localhost:5173. Production: https://www.inceptchange.com.
 
 Use Node.js 22 (or a newer supported LTS), Go 1.24+, Git and Python 3. Python is needed for the audit scripts. Run local commands from the repository root unless a step says otherwise. Keep the frontend and Go backend running in two separate terminals.
@@ -150,6 +152,8 @@ Set these values:
 | ADMIN_EMAILS | .env | Comma-separated authorised admin emails |
 
 The API keys and SSH credentials must remain private. `.env` files are Git-ignored. The site can run without Supabase, but admin sign-in and database features require the migration and user setup in [docs/ADMIN.md](docs/ADMIN.md). Missing email credentials prevent enquiry delivery; Gemini outages use standard guided questions.
+
+Studio photos in `static/images/studio/` are Git-ignored as well; copy them separately when setting up a fresh checkout. They are included in the website build when present locally. `npm run dev` and `npm run build` automatically generate smaller WebP variants using Sharp; you can also run `npm run images:optimize` manually.
 
 MP4 files are also Git-ignored. For the showreel, obtain the existing video separately and place it at `static/images/ShowReel.mp4` before running/building locally.
 

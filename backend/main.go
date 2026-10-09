@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,8 +12,10 @@ import (
 	"net/mail"
 	"net/url"
 	"os"
+	"os/signal"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -260,9 +263,28 @@ func sendEmail(b Brief, customer bool) error {
 }
 func main() {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{"status":"ok"}`)
+	})
 	mux.HandleFunc("/api/enquiry/question", protected(question))
 	mux.HandleFunc("/api/enquiry/submit", protected(submit))
 	server := &http.Server{Addr: env("LISTEN_ADDR", "127.0.0.1:8080"), Handler: mux, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 75 * time.Second, IdleTimeout: 60 * time.Second}
 	log.Printf("Enquiry server listening on %s", server.Addr)
-	log.Fatal(server.ListenAndServe())
+	done := make(chan struct{})
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		defer close(done)
+		<-stop
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		if err := server.Shutdown(ctx); err != nil {
+			log.Printf("Shutdown: %v", err)
+		}
+	}()
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
+	<-done
 }

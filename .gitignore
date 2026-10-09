@@ -4,3 +4,13 @@ build
 .env
 .DS_Store
 *.[mM][pP]4
+
+# Local studio photographs
+/static/images/studio/
+
+# Private Docker runtime configuration and release archives
+/docker/*.env
+/releases/
+
+**/__pycache__/
+/backups/

@@ -1,5 +1,7 @@
 # InceptChange server operations
 
+**Current production uses Docker Compose.** The active project is `/opt/inceptchange/docker-project`; private configuration is in its `docker/web.env` and `docker/api.env`. Caddy handles HTTPS and certificate renewal. Use [docs/DOCKER.md](DOCKER.md) for current deployment commands. The systemd/Nginx paths below are retained history and emergency rollback details.
+
 ## Production
 
 Website: https://www.inceptchange.com. The root domain redirects to www.
@@ -96,3 +98,19 @@ If Gemini fails or reaches its quota, the question proxy returns standard guided
 ## Studio and customer enquiry emails
 
 The Go service sends a branded HTML email with a plain-text alternative to the studio, then a separate confirmation containing the submitted brief to the customer. Customer replies go to inceptchange@gmail.com; studio replies go to the customer. All customer content is HTML-escaped. Each provider request has a 20-second timeout. The API returns sent=true once the studio email is accepted, and customerCopySent indicates acceptance of the customer copy. A customer-copy failure does not undo studio acceptance or prompt a duplicate enquiry retry; the UI explains the partial result. Both emails describe an enquiry, not a confirmed booking. Resend acceptance does not guarantee inbox delivery.
+
+## Release verified — 9 October 2026
+
+The latest frontend, Go email API, ignored studio photos and private Supabase settings were deployed. Backup: `/opt/inceptchange-release-backup-20261009-052308` (includes code, executable and private environment snapshots; root-only access). Live verification passed for public pages, video, studio images, noindex/protected admin routes, admin sign-in, real database dashboard, all-project enquiry recording, studio venue skipping, both branded email acceptances, completion and deletion. The temporary verification booking was deleted. Studio photos are included in the uploaded build; the previous showreel was preserved. Admin sign-in is at https://www.inceptchange.com/admin/login using the configured Supabase account. No admin password was included in server environment files.
+
+## Gemini model update — 9 October 2026
+
+The replacement API key is configured privately on the VPS and locally. Its project rejects gemini-2.5-flash with HTTP 404 and recommends gemini-3.8-flash. GEMINI_MODEL is now gemini-3.8-flash in backend/.env and /etc/inceptchange/enquiry.env. The live question endpoint returned a complete streamed Gemini response without fallback after the update. Refresh an already-open contact page to clear its previous fallback state.
+
+## Studio image optimization — 9 October 2026
+
+`npm run images:optimize` uses sharp to resize studio originals into 800px and 1400px WebP files at quality 78. It runs automatically before development and production builds and retains the original photos. The generated `src/lib/studio-images.json` maps originals to content-hashed URLs. Originals total 44.34 MB; all 1400px variants total 1.74 MB (96% smaller) and the 800px variants total 0.70 MB. The booking slideshow uses responsive sizes and requests only the first photo initially, preloading current/next slides as it becomes visible. Nginx serves `/images/studio/optimized/` directly with a one-year immutable cache because changed source images create new filenames. Ensure original studio photos are copied locally before building a new release. Sharp is a build-time dependency only; it is not needed on the runtime VPS.
+
+## Docker migration verified — 9 October 2026
+
+Docker Engine and Compose were installed from the official Ubuntu repository. The Node and Go images were built/tested on the VPS and checked at a loopback staging port before cutover. Production now runs healthy `web`, `api` and `proxy` services from `/opt/inceptchange/docker-project`. Caddy obtained new certificates for both domain names and owns renewal through persistent volumes. Host Nginx, the legacy website/API units and Certbot timer are disabled. Cutover backup: `/opt/inceptchange-container-cutover-20261009-060521`. Live checks passed for pages, video, immutable image caching, protected admin login, Supabase, Gemini streaming, booking insertion and acceptance of both branded email copies. The temporary booking was deleted. Docker Desktop was not installed on the deployment Mac; container builds and runtime validation used the VPS Docker Engine.

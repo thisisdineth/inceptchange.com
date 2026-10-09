@@ -55,7 +55,7 @@
     "address": "No.21/2, Rajamaha Vihara Rd, Navinna, Mharagama.",
     "email": "inceptchange@gmail.com",
     "phone": "+94 78 777 3059 / +94 77 954 6917",
-    "hours": "8:00 AM \u2014 10:00 PM",
+    "hours": "8:00 AM — 10:00 PM",
     "facebook": "https://www.facebook.com/profile.php?id=61580313956988",
     "instagram": "https://www.instagram.com/_._inceptchange_._?igsh=MXhrOWdkZngxeGJpcw==",
     "linkedin": "https://www.linkedin.com/company/inceptchange",
@@ -84,14 +84,79 @@
   "testimonials": [],
   "studioGallery": [
     {
-      "image": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436711/studio-management/web-covers/qtzys4mmoqeqgmqiqo7m.jpg",
-      "alt": "InceptChange team at work",
-      "caption": "The people behind the lens"
+      "image": "/images/studio/20260728_105255.jpg",
+      "alt": "IdeaBay studio space — view 1",
+      "caption": "IdeaBay · Your next creative space"
     },
     {
-      "image": "https://res.cloudinary.com/dwngt89vw/image/upload/v1777436545/studio-management/web-covers/i8lokusrpjqhakz98lol.jpg",
-      "alt": "Behind the scenes of an InceptChange production",
-      "caption": "From idea to the final frame"
+      "image": "/images/studio/20260728_105301.jpg",
+      "alt": "IdeaBay studio space — view 2",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260728_105308.jpg",
+      "alt": "IdeaBay studio space — view 3",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260810_093534.jpg",
+      "alt": "IdeaBay studio space — view 4",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260810_093539.jpg",
+      "alt": "IdeaBay studio space — view 5",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260810_093709.jpg",
+      "alt": "IdeaBay studio space — view 6",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260810_093719.jpg",
+      "alt": "IdeaBay studio space — view 7",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260810_093728.jpg",
+      "alt": "IdeaBay studio space — view 8",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260903_094255.jpg",
+      "alt": "IdeaBay studio space — view 9",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260903_094819.jpg",
+      "alt": "IdeaBay studio space — view 10",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260903_094824.jpg",
+      "alt": "IdeaBay studio space — view 11",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260926_100805.jpg",
+      "alt": "IdeaBay studio space — view 12",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260926_100811.jpg",
+      "alt": "IdeaBay studio space — view 13",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260926_100821(0).jpg",
+      "alt": "IdeaBay studio space — view 14",
+      "caption": "IdeaBay · Your next creative space"
+    },
+    {
+      "image": "/images/studio/20260926_100821.jpg",
+      "alt": "IdeaBay studio space — view 15",
+      "caption": "IdeaBay · Your next creative space"
     }
   ]
 }

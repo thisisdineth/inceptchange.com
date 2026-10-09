@@ -1,0 +1,52 @@
+name: inceptchange
+services:
+  api:
+    image: inceptchange-api:${RELEASE_TAG:-local}
+    build:
+      context: ./backend
+    env_file: ./docker/api.env
+    environment:
+      LISTEN_ADDR: 0.0.0.0:8080
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    stop_grace_period: 35s
+    mem_limit: 256m
+    pids_limit: 128
+    networks: [backend]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+  web:
+    image: inceptchange-web:${RELEASE_TAG:-local}
+    build:
+      context: .
+    env_file: ./docker/web.env
+    environment:
+      HOST: 0.0.0.0
+      PORT: '3000'
+      ENQUIRY_BACKEND_URL: http://api:8080
+      ADDRESS_HEADER: X-Real-IP
+      SHUTDOWN_TIMEOUT: '30'
+      NODE_OPTIONS: --max-old-space-size=384
+    depends_on:
+      api: {condition: service_healthy}
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    stop_grace_period: 35s
+    mem_limit: 512m
+    pids_limit: 128
+    networks: [frontend, backend]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+networks:
+  frontend:
+  backend:

@@ -1,0 +1,6 @@
+services:
+  web:
+    ports: ['127.0.0.1:${LOCAL_PORT:-5173}:3000']
+    environment:
+      ORIGIN: http://localhost:${LOCAL_PORT:-5173}
+      ADDRESS_HEADER: ''
