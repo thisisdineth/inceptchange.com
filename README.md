@@ -1,5 +1,7 @@
 # InceptChange
 
+See [start.md](start.md) for Windows, macOS and Linux setup, local startup, Git commands and VPS deployment.
+
 Photography and videography studio website, built with Svelte 5, SvelteKit, TypeScript and a Node.js server. White editorial design with teal, peach, rose and lime drawn from the existing logo. The homepage opens with a full-width photograph and overlaid logo, a sticky navbar, scroll-linked image movement, and section entrance animations. Reduced-motion preferences disable these effects.
 
 ## Run

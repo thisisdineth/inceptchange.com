@@ -17,6 +17,7 @@ import (
 )
 
 type Brief struct {
+	Studio   bool   `json:"studio"`
 	Service  string `json:"service"`
 	Date     string `json:"date"`
 	Location string `json:"location"`
@@ -100,6 +101,10 @@ func question(w http.ResponseWriter, r *http.Request) {
 		fail(w, 400, "Unknown step")
 		return
 	}
+	if in.Brief.Studio {
+		in.Brief.Location = "IdeaBay — InceptChange studio"
+		instruction += " This is a studio booking at IdeaBay, InceptChange studio. The venue is fixed. Never ask for a venue or location."
+	}
 	key := os.Getenv("GEMINI_API_KEY")
 	if key == "" {
 		fail(w, 503, "Our creative assistant is temporarily unavailable. Please email inceptchange@gmail.com.")
@@ -169,6 +174,9 @@ func submit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	b := in.Brief
+	if b.Studio {
+		b.Location = "IdeaBay — InceptChange studio"
+	}
 	for _, s := range []string{b.Service, b.Date, b.Location, b.Time, b.Name, b.Email} {
 		if strings.TrimSpace(s) == "" || len(s) > 3000 {
 			fail(w, 400, "Please complete your brief and contact details.")
@@ -190,19 +198,32 @@ func submit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	io.WriteString(w, `{"sent":true}`)
+	copySent := true
+	if err = sendEmail(b, true); err != nil {
+		copySent = false
+		log.Printf("Customer confirmation failed after studio acceptance: %v", err)
+	}
+	json.NewEncoder(w).Encode(map[string]bool{"sent": true, "customerCopySent": copySent})
 }
-func sendMail(b Brief) error {
+func sendMail(b Brief) error { return sendEmail(b, false) }
+func sendEmail(b Brief, customer bool) error {
 	key := os.Getenv("RESEND_API_KEY")
 	if key == "" {
 		return fmt.Errorf("Resend configuration missing")
 	}
+	html, err := renderEmail(b, customer)
+	if err != nil {
+		return err
+	}
+	recipient, replyTo, subject := "inceptchange@gmail.com", b.Email, "New InceptChange creative project enquiry"
+	text := "A new customer enquiry. Reply to discuss availability.\n\n" + summary(b)
+	if customer {
+		recipient, replyTo, subject = b.Email, "inceptchange@gmail.com", "Your story is in good hands — InceptChange"
+		text = "Hi " + b.Name + ",\n\nThanks for sharing your story. We’ve received your enquiry and will contact you soon.\n\n" + summary(b) + "\n\nThis is an enquiry, not a confirmed booking. Reply to this email with any updates."
+	}
 	body, err := json.Marshal(map[string]any{
-		"from":     env("RESEND_FROM", "InceptChange <onboarding@resend.dev>"),
-		"to":       []string{"inceptchange@gmail.com"},
-		"reply_to": b.Email,
-		"subject":  "New InceptChange creative project enquiry",
-		"text":     summary(b),
+		"from": env("RESEND_FROM", "InceptChange <hello@inceptchange.com>"),
+		"to":   []string{recipient}, "reply_to": replyTo, "subject": subject, "text": text, "html": html,
 	})
 	if err != nil {
 		return err
@@ -213,7 +234,8 @@ func sendMail(b Brief) error {
 	}
 	req.Header.Set("Authorization", "Bearer "+key)
 	req.Header.Set("Content-Type", "application/json")
-	resp, err := client.Do(req)
+	mailClient := &http.Client{Timeout: 20 * time.Second, Transport: client.Transport}
+	resp, err := mailClient.Do(req)
 	if err != nil {
 		return err
 	}

@@ -1,5 +1,6 @@
 """Private admin smoke checks using a local mock Supabase service; no real credentials needed."""
 import http.server,threading,json,subprocess,os,time,urllib.request,urllib.error,http.cookiejar
+writes=[]
 class Fake(http.server.BaseHTTPRequestHandler):
  def log_message(self,*args):pass
  def respond(self,value,status=200):
@@ -10,18 +11,25 @@ class Fake(http.server.BaseHTTPRequestHandler):
   return self.respond([{'id':'11111111-1111-4111-8111-111111111111','booking_date':'2026-10-15','name':'Private customer','email':'private@example.com','service':'Studio','start_time':None,'duration':'','notes':'Private notes','status':'confirmed'}])
  def do_POST(self):
   body=json.loads(self.rfile.read(int(self.headers.get('Content-Length',0))) or '{}')
+  if self.path=='/api/enquiry/submit':return self.respond({'sent':True,'customerCopySent':True})
+  if self.path.startswith('/rest/v1/studio_bookings'):writes.append(('POST',body))
   if self.path.startswith('/auth/v1/token'):
    if body.get('password')!='correct':return self.respond({},400)
    return self.respond({'access_token':'test-access','refresh_token':'test-refresh','expires_in':3600,'user':{'email':'admin@example.com'}})
   if 'admin_monthly_stats' in self.path:return self.respond({'visits':12,'pageviews':25,'daily':[{'day':'2026-10-09','visits':12,'pageviews':25}],'pages':[{'path':'/','views':25}]})
   return self.respond({})
+ def do_PATCH(self):
+  body=json.loads(self.rfile.read(int(self.headers.get('Content-Length',0))) or '{}');writes.append(('PATCH',body));self.respond({})
+ def do_DELETE(self):
+  writes.append(('DELETE',self.path));self.respond({})
 server=http.server.HTTPServer(('127.0.0.1',9998),Fake);threading.Thread(target=server.serve_forever,daemon=True).start()
-env=os.environ.copy();env.update({'SUPABASE_URL':'http://127.0.0.1:9998','SUPABASE_SERVICE_ROLE_KEY':'test-key','ADMIN_EMAILS':'admin@example.com'})
+env=os.environ.copy();env.update({'SUPABASE_URL':'http://127.0.0.1:9998','SUPABASE_SECRET_KEY':'test-key','ADMIN_EMAILS':'admin@example.com','ENQUIRY_BACKEND_URL':'http://127.0.0.1:9998','ENQUIRY_PROXY_SECRET':'test-secret'})
 log=open('/tmp/incept-admin-test-server.log','w');proc=subprocess.Popen(['npm','run','dev','--','--port','5199','--strictPort'],env=env,stdout=log,stderr=log,start_new_session=True)
 base='http://localhost:5199';jar=http.cookiejar.CookieJar();browser=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
-def request(path,data=None,origin=None):
+def request(path,data=None,origin=None,content_type=None):
  headers={'Accept':'text/html'};
  if data is not None:headers['Origin']=origin or base
+ if content_type:headers['Content-Type']=content_type
  return browser.open(urllib.request.Request(base+path,data=data,headers=headers),timeout=20)
 try:
  for _ in range(100):
@@ -38,9 +46,19 @@ try:
  except urllib.error.HTTPError as e:assert e.code==400
  r=request('/admin/login',b'email=admin%40example.com&password=correct');html=r.read().decode();assert r.url.endswith('/admin');assert 'Private customer' in html;assert 'Visits this month' in html
  assert all(c.has_nonstandard_attr('HttpOnly') for c in jar)
+ general={'requestId':'22222222-2222-4222-8222-222222222222','brief':{'studio':False,'service':'Brand film','date':'Date undecided','location':'Colombo','time':'Undecided','touches':'Wide shots','name':'Test customer','email':'test@example.com'}}
+ r=request('/api/enquiry/submit',json.dumps(general).encode(),content_type='application/json');result=json.load(r);assert result['sent'] and result['bookingSaved']
+ record=next(body for verb,body in writes if verb=='POST' and isinstance(body,dict) and body.get('request_id')==general['requestId']);assert record['booking_date'] is None and record['is_studio'] is False and record['date_description']=='Date undecided'
+ r=request('/admin?/complete',b'id=11111111-1111-4111-8111-111111111111');assert 'Booking marked complete.' in r.read().decode();assert ('PATCH',{'status':'completed'}) in writes
+ try:
+  r=request('/admin?/delete',b'id=11111111-1111-4111-8111-111111111111');assert 'Confirm deletion' in r.read().decode()
+ except urllib.error.HTTPError as e:assert e.code==400
+ assert not any(verb=='DELETE' for verb,_ in writes)
+ r=request('/admin?/delete',b'id=11111111-1111-4111-8111-111111111111&confirm=yes');assert 'Booking deleted.' in r.read().decode();assert any(verb=='DELETE' for verb,_ in writes)
+
  r=request('/admin?/logout',b'');assert r.url.endswith('/admin/login');assert not list(jar)
  r=request('/admin');assert r.url.endswith('/admin/login')
- print('PASS: unauthenticated redirect, noindex/no-store, allowlist, CSRF, authenticated dashboard, HttpOnly session, public date-only availability and logout (mock Supabase).')
+ print('PASS: unauthenticated redirect, noindex/no-store, allowlist, CSRF, authenticated dashboard, HttpOnly session, public date-only availability logout, general enquiry recording, completion and confirmed deletion (mock Supabase/Go).')
 finally:
  import signal
  os.killpg(proc.pid,signal.SIGTERM);proc.wait(timeout=10);server.shutdown();log.close()

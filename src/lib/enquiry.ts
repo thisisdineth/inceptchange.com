@@ -6,7 +6,7 @@ export const enquiryQuestions: Record<string, string> = {
  touches: 'Any final creative touches? Tell us your favourite shot types, camera angles, mood, reference links or must-have moments. You can also leave it to our team.'
 };
 
-export async function readEnquiryJSON(response: Response): Promise<{ error?: string; sent?: boolean }> {
+export async function readEnquiryJSON(response: Response): Promise<{ error?: string; sent?: boolean; customerCopySent?: boolean }> {
  const fallback = 'We could not connect to the enquiry service. Your details are saved on this page; please retry.';
  if (!response.headers.get('content-type')?.includes('application/json')) throw new Error(fallback);
  try { return await response.json(); } catch { throw new Error(fallback); }

@@ -1,7 +1,7 @@
 <script lang="ts">
  import ContactNow from '$lib/ContactNow.svelte';import ThemeToggle from '$lib/ThemeToggle.svelte';import PageLoader from '$lib/PageLoader.svelte';import JsonLd from '$lib/JsonLd.svelte';import {afterNavigate} from '$app/navigation';import {onMount} from 'svelte';import '../app.css';import {studio} from '$lib/data';import {page} from '$app/state';
  let {children}=$props();let menu=$state(false);let scrolled=$state(false);let activeSection=$state('');
- const links=[{label:'Our work',id:'work',route:'/works'},{label:'What we do',id:'services',route:'/services'},{label:'The studio',id:'about',route:''},{label:'Studio booking',id:'studio-booking',route:''}];
+ const links=[{label:'Our work',id:'work',route:'/works'},{label:'What we do',id:'services',route:'/services'},{label:'Why we?',id:'documentary',route:''},{label:'Studio booking',id:'studio-booking',route:''}];
  afterNavigate(()=>{menu=false;
   if(!page.url.pathname.startsWith('/admin')) fetch('/api/visits',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:page.url.pathname}),keepalive:true}).catch(()=>{});
  });

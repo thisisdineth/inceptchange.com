@@ -1,11 +1,15 @@
+import { createAdminClient } from '@supabase/server/core';
 import { env } from '$env/dynamic/private';
 import { error, redirect, type RequestEvent } from '@sveltejs/kit';
 
-export function configured() { return Boolean(env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY); }
+export function adminClient() {
+ return createAdminClient({ env: { url: env.SUPABASE_URL, secretKeys: { default: env.SUPABASE_SECRET_KEY || '' }, publishableKeys: env.SUPABASE_PUBLISHABLE_KEY ? { default: env.SUPABASE_PUBLISHABLE_KEY } : {}, jwks: env.SUPABASE_JWKS_URL ? new URL(env.SUPABASE_JWKS_URL) : null } });
+}
+export function configured() { return Boolean(env.SUPABASE_URL && env.SUPABASE_SECRET_KEY); }
 export async function supabase(path: string, options: RequestInit = {}) {
  if (!configured()) throw error(503, 'Supabase is not configured.');
  const response = await fetch(`${env.SUPABASE_URL!.replace(/\/$/, '')}${path}`, {
-  ...options, signal: AbortSignal.timeout(15000), headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY!, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, 'Content-Type': 'application/json', ...options.headers }
+  ...options, signal: AbortSignal.timeout(15000), headers: { apikey: env.SUPABASE_SECRET_KEY!, 'Content-Type': 'application/json', ...options.headers }
  });
  if (!response.ok) {
   const details = await response.json().catch(() => ({}));
@@ -27,15 +31,15 @@ export async function requireAdmin(event: RequestEvent) {
  let access = event.cookies.get('admin_access');
  const user = async () => {
   if (!access) return null;
-  const response = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, { headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY!, Authorization: `Bearer ${access}` }, signal: AbortSignal.timeout(10000) });
-  return response.ok ? await response.json() : null;
+  const { data, error: authError } = await adminClient().auth.getUser(access);
+  return authError ? null : data.user;
  };
  let profile;
  try {
   profile = await user();
   if (!profile && event.cookies.get('admin_refresh')) {
-   const response = await fetch(`${env.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, { method: 'POST', headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY!, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: event.cookies.get('admin_refresh') }), signal: AbortSignal.timeout(10000) });
-   if (response.ok) { const session = await response.json(); saveSession(event, session); access = session.access_token; profile = await user(); }
+   const { data, error: refreshError } = await adminClient().auth.refreshSession({ refresh_token: event.cookies.get('admin_refresh')! });
+   if (!refreshError && data.session) { saveSession(event, data.session); access = data.session.access_token; profile = await user(); }
   }
  } catch { throw error(503, 'Authentication is temporarily unavailable. Please retry.'); }
  if (!profile || !adminAllowed(profile.email)) { clearSession(event); throw redirect(303, '/admin/login'); }

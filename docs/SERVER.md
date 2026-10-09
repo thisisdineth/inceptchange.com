@@ -92,3 +92,7 @@ Check the home, contact, portfolio, service pages, video, robots.txt and sitemap
 ## Contact resilience fix
 
 If Gemini fails or reaches its quota, the question proxy returns standard guided questions as SSE and the page discloses that AI is unavailable. Visitors can continue through all fields and submit by Resend. The client also falls back when an intermediary returns HTML instead of SSE. Email responses are checked for JSON before parsing, so an HTML gateway error produces a readable retry message while preserving answers. Email success still requires an explicit `sent: true` response.
+
+## Studio and customer enquiry emails
+
+The Go service sends a branded HTML email with a plain-text alternative to the studio, then a separate confirmation containing the submitted brief to the customer. Customer replies go to inceptchange@gmail.com; studio replies go to the customer. All customer content is HTML-escaped. Each provider request has a 20-second timeout. The API returns sent=true once the studio email is accepted, and customerCopySent indicates acceptance of the customer copy. A customer-copy failure does not undo studio acceptance or prompt a duplicate enquiry retry; the UI explains the partial result. Both emails describe an enquiry, not a confirmed booking. Resend acceptance does not guarantee inbox delivery.

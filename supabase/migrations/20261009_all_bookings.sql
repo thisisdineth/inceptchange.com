@@ -1,0 +1,11 @@
+begin;
+alter table public.studio_bookings alter column booking_date drop not null;
+alter table public.studio_bookings add column if not exists is_studio boolean not null default true;
+alter table public.studio_bookings add column if not exists date_description text not null default '';
+alter table public.studio_bookings add column if not exists location text not null default '';
+alter table public.studio_bookings add column if not exists email_status text not null default 'pending';
+alter table public.studio_bookings drop constraint if exists studio_bookings_status_check;
+alter table public.studio_bookings add constraint studio_bookings_status_check check (status in ('requested','confirmed','blocked','cancelled','completed'));
+drop index if exists public.studio_reserved_date_idx;
+create unique index studio_reserved_date_idx on public.studio_bookings(booking_date) where is_studio and status in ('confirmed','blocked');
+commit;

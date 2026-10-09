@@ -7,7 +7,7 @@ export const GET: RequestHandler = async ({ url }) => {
  if (!configured()) return json({ dates: [], available: false }, { headers: { 'Cache-Control': 'no-store' } });
  const [year, number] = month.split('-').map(Number); const end = new Date(Date.UTC(year, number,1)).toISOString().slice(0,10);
  try {
-  const response = await supabase(`/rest/v1/studio_bookings?select=booking_date&booking_date=gte.${month}-01&booking_date=lt.${end}&status=in.(confirmed,blocked)`);
+  const response = await supabase(`/rest/v1/studio_bookings?select=booking_date&booking_date=gte.${month}-01&booking_date=lt.${end}&is_studio=eq.true&status=in.(confirmed,blocked)`);
   const entries = await response.json();
   return json({ dates: entries.map((b: { booking_date: string }) => b.booking_date), available: true }, { headers: { 'Cache-Control': 'no-store' } });
  } catch { return json({ dates: [], available: false }, { headers: { 'Cache-Control': 'no-store' } }); }
