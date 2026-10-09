@@ -1,5 +1,9 @@
+# Public pages and assets are crawlable by search and AI search crawlers.
+# Access to administration is protected by authentication, not robots.txt.
 User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+Disallow: /healthz
+
 Sitemap: https://www.inceptchange.com/sitemap.xml

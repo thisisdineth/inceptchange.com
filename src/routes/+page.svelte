@@ -29,8 +29,8 @@ onMount(()=>{
  if(!motion.matches){document.querySelectorAll('.section-head, .work-card, .service-card, .about > div, .feature > div').forEach((element,i)=>{(element as HTMLElement).style.setProperty('--reveal-delay',`${i%4*70}ms`);element.classList.add('reveal-ready');observer.observe(element);});}
  return ()=>{window.removeEventListener('scroll',scroll);window.removeEventListener('resize',scroll);motion.removeEventListener('change',scroll);cancelAnimationFrame(frame);window.clearInterval(slideshow);observer.disconnect();};
 });
-import Showreel from '$lib/Showreel.svelte';import StudioBooking from '$lib/StudioBooking.svelte';import AboutStudio from '$lib/AboutStudio.svelte';import StudioStats from '$lib/StudioStats.svelte';import SEO from '$lib/SEO.svelte';import WorkCard from '$lib/WorkCard.svelte';import {studio,works,services,photo,heroSlides} from '$lib/data';</script>
-<SEO title="Photography & Videography Studio in Sri Lanka" description="Discover InceptChange’s photography, videography and documentary work. A creative studio in Sri Lanka bringing brands, people and meaningful stories into focus."/>
+import Partners from '$lib/Partners.svelte';import Showreel from '$lib/Showreel.svelte';import StudioBooking from '$lib/StudioBooking.svelte';import AboutStudio from '$lib/AboutStudio.svelte';import StudioStats from '$lib/StudioStats.svelte';import SEO from '$lib/SEO.svelte';import WorkCard from '$lib/WorkCard.svelte';import {studio,works,services,photo,heroSlides} from '$lib/data';</script>
+<SEO title="Photography & Videography Studio in Sri Lanka" description="Discover InceptChange’s photography, videography and documentary work. Based in Maharagama, serving all Sri Lanka. Explore our work or request an IdeaBay studio session."/>
 <div id="home" class="hero-stage" bind:this={heroStage}>
 <section class="cinematic-hero" style={`--hero-progress: ${progress}; --frame-progress: ${frameProgress};`} aria-label="Welcome to InceptChange">
  <div class="cinematic-image">
@@ -57,6 +57,7 @@ import Showreel from '$lib/Showreel.svelte';import StudioBooking from '$lib/Stud
 </div>
 <section class="section" id="work"><div class="section-head"><div><p class="eyebrow"><span class="dot"></span> SELECTED WORK</p><h2>Stories worth<br/><span class="muted">a closer look.</span></h2><p class="work-intro">Photography, film, and documentary projects for people, brands, and communities in Sri Lanka.</p></div><a class="text-link" href="/works">All our work <span>↗</span></a></div><div class="work-grid">{#each works as work}<WorkCard {work}/>{/each}</div></section>
 <StudioStats/>
+<Partners/>
 <section class="section services-section" id="services"><div class="section-head"><div><p class="eyebrow"><span class="dot"></span> WHAT WE DO</p><h2>Your vision.<br/><span class="muted">Our creative lens.</span></h2></div><p class="section-description">From a single photograph to a complete production, we find the right way to tell your story.</p></div><div class="service-grid">{#each services as service,i}<a class={'service-card '+service.color} href={'/services/'+service.slug}><div class="service-number">0{i+1}<span>↗</span></div><h3>{service.title}</h3><p>{service.description}</p></a>{/each}</div></section>
 <section class="feature" id="documentary"><Showreel poster={photo(studio.covers.documentary,1800)}/><div><p class="eyebrow">BEYOND THE FRAME</p></div></section>
 <AboutStudio/>

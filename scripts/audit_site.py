@@ -4,9 +4,14 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 from urllib.parse import urlsplit, urljoin
 import json
+import sys
 import xml.etree.ElementTree as ET
+from urllib.request import build_opener, install_opener
+opener = build_opener()
+opener.addheaders = [('User-Agent', 'InceptChangeSiteAudit/1.0')]
+install_opener(opener)
 
-BASE='http://localhost:5173'
+BASE=(sys.argv[1] if len(sys.argv)>1 else 'http://localhost:5173').rstrip('/')
 ORIGIN='https://www.inceptchange.com'
 class Page(HTMLParser):
     def __init__(self,html):
@@ -30,7 +35,7 @@ class Page(HTMLParser):
 sitemap=ET.fromstring(urlopen(BASE+'/sitemap.xml').read())
 paths=[urlsplit(item.find('{http://www.sitemaps.org/schemas/sitemap/0.9}loc').text).path for item in sitemap]
 cache={path:Page(urlopen(BASE+path).read().decode()) for path in paths}
-assert len(paths)==10
+assert len(paths)==12
 assert sitemap.findall('.//{http://www.google.com/schemas/sitemap-image/1.1}loc')
 titles=set(); descriptions=set(); checked=set()
 for path,page in cache.items():
@@ -39,6 +44,7 @@ for path,page in cache.items():
     assert page.title and page.title not in titles,(path,'title'); titles.add(page.title)
     description=page.metas['description']; assert description and description not in descriptions; descriptions.add(description)
     for key in ['og:title','og:description','og:image','og:image:alt','twitter:title','twitter:description','twitter:image','twitter:image:alt']: assert page.metas[key],(path,key)
+    assert page.metas['og:image'].startswith('https://'),(path,'absolute preview image')
     assert any(schema.get('@type')=='ProfessionalService' for schema in page.schemas)
     graph=[node for schema in page.schemas for node in schema.get('@graph',[])]
     assert any(node.get('@id')==ORIGIN+path+'#page' for node in graph)
@@ -49,6 +55,7 @@ for path,page in cache.items():
         url=urlsplit(urljoin(BASE+path,link))
         if url.netloc!=urlsplit(BASE).netloc: continue
         target=url.path or '/'
+        if target.startswith('/cdn-cgi/'): continue  # Cloudflare-injected email protection links
         assert target in cache,(path,'unknown route',link)
         if url.fragment: assert url.fragment in cache[target].ids,(path,'missing anchor',link)
         checked.add(link)

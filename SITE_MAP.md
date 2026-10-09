@@ -1,47 +1,50 @@
-# Site structure and SEO
+# Site structure
 
-## Homepage order
+## Homepage
 
-| Order | Section | Link | Navbar |
-| --- | --- | --- | --- |
-| 1 | Full-screen slideshow | `/#home` | Logo → homepage |
-| 2 | Photography / Videography / Documentary / Experiences marquee | Below slideshow | — |
-| 3 | Selected work and project galleries | `/#work` | Our work |
-| 4 | Years, projects, reach and clients | Below selected work | — |
-| 5 | Four service cards | `/#services` | What we do |
-| 6 | Documentary feature | `/#documentary` | Linked through Documentary service |
-| 7 | About InceptChange with scroll-filled copy | `/#about` | The studio |
-| 8 | Studio booking calendar and image slideshow | `/#studio-booking` | Studio booking |
-| 9 | Contact details, navigation, marquee and copyright | Footer | Let’s talk → `/contact` |
+1. Hero photograph slideshow (`/#home`).
+2. Photography, videography, documentary and experiences marquee.
+3. Selected work (`/#work`) linking to `/works` and three project galleries.
+4. Our story in numbers.
+5. Partner logo grid from `static/images/partner logos/`.
+6. Service cards (`/#services`).
+7. Showreel (`/#documentary`), reached by the navbar's “Why we?” link.
+8. About InceptChange (`/#about`).
+9. IdeaBay studio gallery and booking calendar (`/#studio-booking`).
+10. Contact details and footer navigation, including the services and studio hubs.
 
-Navbar links follow this order. Section links return to the relevant homepage anchor from other pages; the active section highlights on scroll. “All our work” and footer “Full portfolio” link to `/works`. The mobile menu closes on selection/navigation or Escape.
+## Public pages
 
-## Pages
+| URL | Purpose |
+| --- | --- |
+| `/` | Studio introduction, work, services, showreel and calendar |
+| `/services` | Creative services hub |
+| `/services/photography` | Portrait, event and brand photography guidance |
+| `/services/videography` | Brand films, event coverage and production guidance |
+| `/services/documentary` | Documentary photography and filmmaking guidance |
+| `/services/event-management` | Planning, coordination and visual coverage guidance |
+| `/studio` | IdeaBay in Maharagama, photographs, session guidance and calendar |
+| `/works` | Portfolio index |
+| `/works/giga-field-visit` | Project photograph gallery |
+| `/works/women-empowerment-program` | Project photograph gallery |
+| `/works/weather-kids-program` | Project photograph gallery |
+| `/contact` | Guided enquiry; records bookings and sends team/customer emails |
 
-- `/works`: portfolio index, linking to all three project galleries.
-- `/works/giga-field-visit`
-- `/works/women-empowerment-program`
-- `/works/weather-kids-program`
-- `/services/photography`
-- `/services/videography`
-- `/services/documentary`
-- `/services/event-management`
-- `/contact`: enquiry form. Studio booking passes the preferred date into the message. Service enquiry links pass the service choice. Sending still uses the visitor’s email app.
+Studio calendar links pass the chosen date and studio flag into the enquiry flow. Studio enquiries use IdeaBay as their venue. Other enquiries collect their project location. Requests require team confirmation.
 
-## SEO implementation
+## Private and technical routes
 
-All ten pages render their content and metadata on the server. Each has a unique title/description, a production canonical URL without query parameters, Open Graph and Twitter metadata including image descriptions. Trailing slash URLs normalize to the same route.
+- `/admin/login`, `/admin`: authenticated administration, noindex, private caching, excluded from public navigation and sitemap.
+- `/api/`: enquiry, availability, visits and protected admin endpoints; excluded from crawling.
+- `/healthz`: operational health check, excluded from crawling.
+- `/sitemap.xml`: twelve public canonical pages plus image URLs.
+- `/robots.txt`: public crawl access and private route exclusions.
+- `/indexnow-key.txt`: public domain verification token for IndexNow notifications.
 
-Structured data includes the studio, website, page information, breadcrumbs, service descriptions, portfolio list and project creative works. Only information present on the website is included; no invented reviews, ratings, prices or video metadata. Visible breadcrumbs and footer links connect the content.
+## Business facts and search operations
 
-The sitemap includes all pages and their photography images, with XML escaping and cache headers. Robots points to the sitemap. Missing pages return HTTP 404 and a `noindex` directive. Connection hints warm the image and font providers.
+Current studio: No. 21/2, Rajamaha Vihara Road, Navinna, Maharagama, Sri Lanka. InceptChange started in Dharga Town and takes projects throughout Sri Lanka. The business owner confirmed these facts on October 9, 2026.
 
-Validation: `npm run check`, `npm run build`, and `python3 scripts/audit_site.py` (with the development server running). The audit checks all ten pages, twenty distinct internal links, section targets, metadata, JSON-LD, image sitemap, query-string canonicals and missing-page responses. This is a code/HTTP audit, not a Lighthouse run or Google Rich Results Test.
+Public pages render metadata and JSON-LD on the server. Titles and descriptions are unique; canonical URLs exclude enquiry parameters. Structured data covers the studio, website, breadcrumbs, service pages, visible FAQs and portfolio. Missing routes return a noindexed HTTP 404. Search and AI visibility work, ownership verification, testing and measurement are documented in [docs/SEO.md](docs/SEO.md).
 
-## Remaining launch work
-
-Confirm the business address: About describes Dharga Town; the imported footer address says Navinna/Maharagama. Current schema uses the footer address without inferring a locality or coordinates. Correct the content in `src/lib/content.json` and `src/lib/AboutStudio.svelte` once confirmed.
-
-Before replacing the public site, configure HTTPS/canonical-host redirects, map any changed indexed routes, submit the sitemap in Search Console, validate structured data using Google’s Rich Results Test, and measure mobile Core Web Vitals on the deployed site. Check that Cloudinary assets are crawlable. Studio gallery images currently use existing behind-the-scenes photos; replace `studioGallery` entries with actual studio interiors if desired.
-
-Google references: [structured data](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data), [image sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/image-sitemaps). Search rankings and rich result appearance are not guaranteed by these changes.
+Run `python3 scripts/audit_site.py` while local development is running, or supply the production URL to audit the deployed pages.

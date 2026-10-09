@@ -61,3 +61,5 @@ The mock admin test uses macOS/Linux process management. Live database/provider 
 src/lib/content.json contains portfolio/gallery/contact content, src/lib/data.ts contains service copy, and the ignored static/images/studio folder contains source studio photos. Keep those files available to the Docker build. npm run images:optimize generates responsive variants and their manifest; originals remain intact locally.
 
 A GitHub push does not deploy the VPS automatically. Follow docs/DOCKER.md to upload source, build the release and replace the healthy containers. Keep certificate volumes and a verified rollback image/configuration backup.
+
+Search visibility, Sri Lankan service content, crawler access, verification and measurement are documented in [docs/SEO.md](docs/SEO.md).

@@ -1,7 +1,7 @@
 <script lang="ts">
  import {onMount} from 'svelte';
  const copy=[
-  'InceptChange is a Creative Digital Studio based in Dharga Town, Sri Lanka. Founded with a singular belief — that every brand has a story worth telling beautifully.',
+  'InceptChange is a Creative Digital Studio based in Maharagama, Sri Lanka, with roots in Dharga Town. Working across Sri Lanka, we share a singular belief — that every brand has a story worth telling beautifully.',
   'Over 9+ years, we have partnered with NGOs, startups, corporate brands, and families to produce photography, videography, documentary films, and events that truly endure.'
  ];
  const tokens=copy.map(text=>text.split(' '));
