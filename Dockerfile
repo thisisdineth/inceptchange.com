@@ -8,10 +8,10 @@ FROM dependencies AS build
 COPY svelte.config.js vite.config.ts tsconfig.json ./
 COPY src ./src
 COPY static ./static
-COPY scripts/optimize_images.mjs ./scripts/optimize_images.mjs
+COPY scripts/optimize_images.mjs scripts/optimize_hero_images.mjs ./scripts/
 RUN npm run check && npm run build
-# Only optimized studio images are needed in the production image.
-RUN find build/client/images/studio -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -delete
+# Only optimized photographs are needed in the production image.
+RUN find build/client/images/studio build/client/images/hero -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -delete
 
 FROM node:22-bookworm-slim AS production-dependencies
 WORKDIR /app

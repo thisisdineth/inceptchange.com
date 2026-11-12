@@ -1,5 +1,6 @@
 import content from './content.json';
 import studioImages from './studio-images.json';
+import heroImages from './hero-images.json';
 export const studio = content;
 export const slugify = (text:string) => text.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 export const works = content.featuredWorks.map(work=>({...work,slug:slugify(work.title)}));
@@ -16,7 +17,7 @@ export const services = [
 ];
 
 export const heroSlides = [
- {image:content.covers.documentary,alt:'Documentary photography by InceptChange in Sri Lanka',first:'Real people. Real stories.',second:'Made to',emphasis:'make a difference.'},
- {image:content.covers.photography,alt:'Schoolchildren walking with umbrellas in Sri Lanka, photographed by InceptChange',first:'Every story deserves',second:'to be',emphasis:'beautifully told.'},
- {image:content.covers.videography,alt:'A moment from InceptChange’s videography portfolio',first:'More than a moment.',second:'A story',emphasis:'you can feel.'}
+ {image:heroImages._DSC7787,alt:'A family travelling by boat through floodwater, photographed by InceptChange',first:'Real people. Real stories.',second:'Made to',emphasis:'make a difference.'},
+ {image:heroImages.DSC03323,alt:'Schoolchildren gathered together outdoors, photographed by InceptChange',first:'Every story deserves',second:'to be',emphasis:'beautifully told.'},
+ {image:heroImages.DIL00066,alt:'Attendees at a UNICEF conference, photographed by InceptChange',first:'More than a moment.',second:'A story',emphasis:'you can feel.'}
 ];

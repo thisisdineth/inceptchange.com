@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "images:optimize": "node scripts/optimize_images.mjs",
+    "images:optimize": "node scripts/optimize_images.mjs && node scripts/optimize_hero_images.mjs",
     "predev": "npm run images:optimize",
     "prebuild": "npm run images:optimize"
   },

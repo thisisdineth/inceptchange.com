@@ -4,7 +4,8 @@ import {onMount} from 'svelte';
 let heroStage: HTMLElement;
 let currentSlide=$state(0);
 let paused=$state(false);
-let loadedSlides=$state<boolean[]>([true,false,false]);
+let loadedSlides=$state<boolean[]>([false,false,false]);
+let loadRemainingSlides=$state(false);
 const slide=$derived(heroSlides[currentSlide]);
 function selectSlide(index:number){if(loadedSlides[index]){currentSlide=index;paused=true;}}
 let frameProgress=$state(0);
@@ -36,7 +37,9 @@ import Partners from '$lib/Partners.svelte';import Showreel from '$lib/Showreel.
 <section class="cinematic-hero" style={`--hero-progress: ${progress}; --frame-progress: ${frameProgress};`} aria-label="Welcome to InceptChange">
  <div class="cinematic-image">
   {#each heroSlides as item,i}
-   <img class="slideshow-image" class:current={currentSlide===i} src={photo(item.image,2400)} srcset={`${photo(item.image,800)} 800w, ${photo(item.image,1600)} 1600w, ${photo(item.image,2400)} 2400w`} sizes="100vw" alt={item.alt} aria-hidden={currentSlide!==i} width="2400" height="1600" fetchpriority={i===0?'high':'low'} onload={()=>loadedSlides[i]=true}/>
+   {#if i===0 || loadRemainingSlides}
+   <img class="slideshow-image" class:current={currentSlide===i} src={item.image.src} srcset={item.image.srcset} sizes="100vw" alt={item.alt} aria-hidden={currentSlide!==i} width={item.image.width} height={item.image.height} decoding={i===0?'auto':'async'} fetchpriority={i===0?'high':'low'} onload={()=>{loadedSlides[i]=true;if(i===0)loadRemainingSlides=true;}} onerror={()=>{if(i===0)loadRemainingSlides=true;}}/>
+   {/if}
   {/each}
  </div>
  <div class="cinematic-shade"></div>
